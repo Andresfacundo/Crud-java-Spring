@@ -2,6 +2,7 @@ package com.example.Crud.API.Spring.Boot.model;
 
 
 import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -54,13 +55,5 @@ public class Cita {
         this.fecha = fecha;
     }
 
-    @Override
-    public String toString() {
-        return "Cita{" +
-                "id=" + id +
-                ", paciente=" + paciente +
-                ", medico=" + medico +
-                ", fecha=" + fecha +
-                '}';
-    }
+
 }

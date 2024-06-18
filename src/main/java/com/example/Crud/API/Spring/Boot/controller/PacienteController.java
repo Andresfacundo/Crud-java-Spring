@@ -3,6 +3,7 @@ package com.example.Crud.API.Spring.Boot.controller;
 import com.example.Crud.API.Spring.Boot.model.Paciente;
 import com.example.Crud.API.Spring.Boot.services.PacienteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -33,17 +34,26 @@ public class PacienteController {
     }
 
     @PutMapping(path = "/{id}")
-    public Paciente updatePaciente(@RequestBody Paciente request,@PathVariable( "id") Long id) {
-        return this.pacienteService.updatePaciente(request, id);
+    public ResponseEntity updatePaciente(@RequestBody Paciente request, @PathVariable("id") Long id) {
+        Optional<Paciente> existingPaciente = this.pacienteService.getPacienteById(id);
+        if (existingPaciente.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        Paciente updatedPaciente = this.pacienteService.updatePaciente(request, id);
+        return ResponseEntity.ok(updatedPaciente);
     }
 
     @DeleteMapping(path = "/{id}")
     public String deletePaciente(@PathVariable("id") Long id) {
-        boolean ok = this.pacienteService.deletePaciente(id);
-        if (ok){
-            return "Paciente con id " + id + " eliminado";
-        }else{
+        if (!pacienteService.getPacienteById(id).isPresent()) {
             return "Error al eliminar el Paciente";
+        } else {
+            boolean ok = this.pacienteService.deletePaciente(id);
+            if (ok) {
+                return "Paciente con id " + id + " eliminado";
+            } else {
+                return "Error al eliminar el Paciente";
+            }
         }
     }
 }

@@ -35,4 +35,6 @@ public class Medico {
     public void setEspecialidad(String especialidad) {
         this.especialidad = especialidad;
     }
+
+
 }

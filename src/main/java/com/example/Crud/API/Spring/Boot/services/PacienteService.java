@@ -27,13 +27,13 @@ public class PacienteService {
     }
 
     public Paciente updatePaciente(Paciente request, Long id) {
-       Paciente pacienteOptional = pacienteRepository.findById(id).get();
+        Paciente pacienteOptional = pacienteRepository.findById(id).get();
 
-       pacienteOptional.setNombre(request.getNombre());
-       pacienteOptional.setApellido(request.getApellido());
-       pacienteOptional.setEmail(request.getEmail());
+        pacienteOptional.setNombre(request.getNombre());
+        pacienteOptional.setApellido(request.getApellido());
+        pacienteOptional.setEmail(request.getEmail());
 
-       return pacienteRepository.save(pacienteOptional);
+        return pacienteRepository.save(pacienteOptional);
 
     }
 
@@ -41,7 +41,7 @@ public class PacienteService {
         try {
             pacienteRepository.deleteById(id);
             return true;
-        }catch(Exception e) {
+        } catch (Exception e) {
             return false;
         }
     }

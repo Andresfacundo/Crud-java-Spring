@@ -3,8 +3,8 @@ package com.example.Crud.API.Spring.Boot.controller;
 import com.example.Crud.API.Spring.Boot.model.Cita;
 import com.example.Crud.API.Spring.Boot.model.Medico;
 import com.example.Crud.API.Spring.Boot.services.CitaService;
-import jakarta.persistence.GeneratedValue;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -24,8 +24,8 @@ public class CitaController {
     }
 
     @PostMapping
-    public Cita saveCita(@RequestBody Cita cita) {
-        return this.citaService.saveCita(cita);
+    public Cita createCita(@RequestBody Cita cita) {
+        return this.citaService.createCita(cita);
     }
 
     @GetMapping(path = "/{id}")
@@ -34,18 +34,27 @@ public class CitaController {
     }
 
     @PutMapping(path = "/{id}")
-    public Cita updateCita(@RequestBody Cita request,@PathVariable("id") Long id) {
-        return this.citaService.updateCita(request,id);
+    public ResponseEntity updateCita(@RequestBody Cita request, @PathVariable("id") Long id) {
+        Optional<Cita> existingCita = this.citaService.getCitaById(id);
+        if (existingCita.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        Cita updatedCita = this.citaService.updateCita(request, id);
+        return ResponseEntity.ok(updatedCita);
     }
 
     @DeleteMapping(path = "/{id}")
     public String deleteCita(@PathVariable("id") long id) {
-        boolean ok = this.citaService.deleteCita(id);
-        if(ok){
-            return "Cita con id " + id + " eliminada";
-        }else {
-            return "Error al eliminar la cita";
-        }
+        if (!citaService.getCitaById(id).isPresent()) {
+            return ("No se puede eliminar la cita con id " + id);
+        } else {
+            boolean notFound = this.citaService.deleteCita(id);
 
+            if (notFound) {
+                return "Cita con id " + id + " eliminada";
+            } else {
+                return "Error al eliminar la cita";
+            }
+        }
     }
 }

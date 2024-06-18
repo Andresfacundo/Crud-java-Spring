@@ -25,7 +25,7 @@ public class MedicoService {
         return medicoRepository.findById(id);
     }
 
-    public Medico updateMedico(Medico request,Long id) {
+    public Medico updateMedico(Medico request, Long id) {
         Medico medicoOptional = medicoRepository.findById(id).get();
 
         medicoOptional.setNombre(request.getNombre());
@@ -38,7 +38,7 @@ public class MedicoService {
         try {
             medicoRepository.deleteById(id);
             return true;
-        }catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
     }
